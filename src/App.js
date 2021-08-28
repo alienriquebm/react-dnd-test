@@ -39,6 +39,15 @@ const customData = [
     content:
       'Cillum irure anim in minim ut. Lorem officia quis nulla magna aliquip deserunt irure aute ea labore.',
   },
+  {
+    id: 3,
+    level: 2,
+    comments: 34,
+    taskCardId: 3,
+    author: 'Ali Briceño, 2 days ago',
+    content:
+      'Cillum irure anim in minim ut. Lorem officia quis nulla magna aliquip deserunt irure aute ea labore.',
+  },
 ];
 
 const App = () => {
@@ -49,6 +58,8 @@ const App = () => {
     for (let i = 0; i < newData.length; i += 1) {
       if (newData[i].id === item.id) {
         newData[i].taskCardId = newTaskCard;
+        const itemToOrder = newData.splice(i, 1);
+        newData.push(itemToOrder[0]);
         setData(newData);
         break;
       }
