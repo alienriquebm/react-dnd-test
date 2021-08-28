@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CardItem from './CardItem';
+import CardItem, { CardItemWrapper } from './CardItem';
 
 const TasksCardWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.gray400};
@@ -18,14 +18,15 @@ const TasksCardTitle = styled.div`
   border-top-right-radius: 8px;
   background-color: white;
   font-weight: bold;
+  align-items: center;
 `;
 
 const TasksCardBody = styled.div`
   padding: 12px;
-  & div {
+  & ${CardItemWrapper} {
     margin-top: 12px;
   }
-  & div:first-child {
+  & ${CardItemWrapper}:first-child {
     margin-top: 0;
   }
 `;

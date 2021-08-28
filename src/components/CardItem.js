@@ -20,8 +20,8 @@ const itemLevel = {
   },
 };
 
-const CardItemWrapper = styled.div`
-  padding: 8px;
+export const CardItemWrapper = styled.div`
+  padding: 12px;
   border: 1px solid ${({ theme }) => theme.gray400};
   background-color: white;
   border-radius: 8px;
@@ -31,6 +31,7 @@ const CardItemWrapper = styled.div`
 const CardItemHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
 `;
 
 const CardItemComments = styled.div`
