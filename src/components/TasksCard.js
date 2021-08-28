@@ -26,7 +26,7 @@ const TasksCardTitle = styled.div`
 
 const TasksCardBody = styled.div`
   height: 100%;
-  background-color: ${({ isOverDragging }) => (isOverDragging ? 'green' : 'initial')};
+  background-color: ${({ isOverDragging }) => (isOverDragging ? '#d0fae6' : 'initial')};
   padding: 12px;
   & ${CardItemWrapper} {
     margin-top: 12px;
@@ -53,8 +53,6 @@ const TasksCard = ({ taskCardId, title, data }) => {
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.ITEM_CARD,
     drop: (item) => {
-      console.log(item);
-      console.log(taskCardId);
       return setItemInTaskCard(item, taskCardId);
     },
     collect: (monitor) => ({ isOver: !!monitor.isOver() }),
@@ -63,7 +61,9 @@ const TasksCard = ({ taskCardId, title, data }) => {
     <TasksCardWrapper>
       <TasksCardTitle>
         <div>{title}</div>
-        <TastCardTitleCounter>{data ? data.length : 0}</TastCardTitleCounter>
+        <TastCardTitleCounter>
+          {data ? data.filter((item) => item.taskCardId === taskCardId).length : 0}
+        </TastCardTitleCounter>
       </TasksCardTitle>
       <TasksCardBody ref={drop} isOverDragging={isOver}>
         {!!data &&

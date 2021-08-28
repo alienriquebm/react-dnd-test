@@ -47,10 +47,8 @@ const App = () => {
   const setItemInTaskCard = (item, newTaskCard) => {
     const newData = [...data];
     for (let i = 0; i < newData.length; i += 1) {
-      console.log(newData[i]);
       if (newData[i].id === item.id) {
         newData[i].taskCardId = newTaskCard;
-        console.log(newData);
         setData(newData);
         break;
       }
