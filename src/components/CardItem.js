@@ -25,6 +25,7 @@ const CardItemWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.gray400};
   background-color: white;
   border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 
 const CardItemHeader = styled.div`
