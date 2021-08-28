@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { useDrop } from 'react-dnd';
+import ItemTypes from 'ItemTypes';
+import AppContext from 'AppContext';
 import CardItem, { CardItemWrapper } from './CardItem';
 
 const TasksCardWrapper = styled.div`
@@ -22,6 +25,8 @@ const TasksCardTitle = styled.div`
 `;
 
 const TasksCardBody = styled.div`
+  height: 100%;
+  background-color: ${({ isOverDragging }) => (isOverDragging ? 'green' : 'initial')};
   padding: 12px;
   & ${CardItemWrapper} {
     margin-top: 12px;
@@ -43,25 +48,38 @@ const TastCardTitleCounter = styled.div`
   background-color: ${({ theme }) => theme.gray400};
 `;
 
-const TasksCard = ({ title, data }) => {
+const TasksCard = ({ taskCardId, title, data }) => {
+  const { setItemInTaskCard } = useContext(AppContext);
+  const [{ isOver }, drop] = useDrop({
+    accept: ItemTypes.ITEM_CARD,
+    drop: (item) => {
+      console.log(item);
+      console.log(taskCardId);
+      return setItemInTaskCard(item, taskCardId);
+    },
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  });
   return (
     <TasksCardWrapper>
       <TasksCardTitle>
         <div>{title}</div>
         <TastCardTitleCounter>{data ? data.length : 0}</TastCardTitleCounter>
       </TasksCardTitle>
-      <TasksCardBody>
+      <TasksCardBody ref={drop} isOverDragging={isOver}>
         {!!data &&
           !!data.length &&
-          data.map((item) => (
-            <CardItem
-              key={item.id}
-              author={item.author}
-              commentsQty={item.comments}
-              content={item.content}
-              level={item.level}
-            />
-          ))}
+          data
+            .filter((item) => item.taskCardId === taskCardId)
+            .map((itemToRender) => (
+              <CardItem
+                key={itemToRender.id}
+                id={itemToRender.id}
+                author={itemToRender.author}
+                commentsQty={itemToRender.comments}
+                content={itemToRender.content}
+                level={itemToRender.level}
+              />
+            ))}
       </TasksCardBody>
     </TasksCardWrapper>
   );

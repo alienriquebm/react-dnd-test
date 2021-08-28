@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from 'assets/styles/global';
 import { lightTheme } from 'assets/styles/theme';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
 
@@ -12,7 +14,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={lightTheme}>
       <GlobalStyles />
-      <App />
+      <DndProvider backend={HTML5Backend}>
+        <App />
+      </DndProvider>
     </ThemeProvider>
   </React.StrictMode>,
   root,

@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { MdComment } from 'react-icons/md';
+import { useDrag } from 'react-dnd';
+import ItemTypes from 'ItemTypes';
 
 const itemLevel = {
   0: {
@@ -26,6 +28,7 @@ export const CardItemWrapper = styled.div`
   background-color: white;
   border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  opacity: ${({ isDragging }) => (isDragging ? 0.5 : 1)};
 `;
 
 const CardItemHeader = styled.div`
@@ -70,9 +73,15 @@ const CardItemContent = styled.div`
   line-height: 18px;
 `;
 
-const CardItem = ({ level, commentsQty, author, content }) => {
+const CardItem = ({ id, level, commentsQty, author, content }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: ItemTypes.ITEM_CARD,
+    item: { id },
+    collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+  });
+
   return (
-    <CardItemWrapper>
+    <CardItemWrapper ref={drag} isDragging={isDragging}>
       <CardItemHeader>
         <CardItemComments>
           <MdComment />
