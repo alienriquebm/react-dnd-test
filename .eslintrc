@@ -3,26 +3,17 @@
     "__PATH_PREFIX__": true
   },
   "parser": "babel-eslint",
-  "extends": [
-    "airbnb",
-    "plugin:prettier/recommended"
-  ],
+  "extends": ["airbnb", "plugin:prettier/recommended"],
   "rules": {
     "linebreak-style": 0,
     "prettier/prettier": "error",
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "extensions": [".js", ".jsx"]
       }
     ],
-    "react/prop-types": [
-      0,
-      {}
-    ]
+    "react/prop-types": ["off", {}]
   },
   "parserOptions": {
     "ecmaVersion": 6,
@@ -34,9 +25,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ]
+        "paths": ["src"]
       }
     }
   },

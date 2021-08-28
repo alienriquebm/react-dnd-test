@@ -1,14 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyles from 'assets/styles/global';
+import { lightTheme } from 'assets/styles/theme';
 import App from './App';
 // import reportWebVitals from './reportWebVitals';
-import './index.css';
 
 const root = document.getElementById('root');
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={lightTheme}>
+      <GlobalStyles />
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   root,
 );
