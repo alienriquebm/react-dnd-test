@@ -70,11 +70,12 @@ const TasksCard = ({ taskCardId, title, data }) => {
           !!data.length &&
           data
             .filter((item) => item.taskCardId === taskCardId)
-            .map((itemToRender) => (
+            .map((itemToRender, index) => (
               <CardItem
                 key={itemToRender.id}
                 id={itemToRender.id}
                 author={itemToRender.author}
+                index={index}
                 commentsQty={itemToRender.comments}
                 content={itemToRender.content}
                 level={itemToRender.level}

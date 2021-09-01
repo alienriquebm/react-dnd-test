@@ -58,16 +58,23 @@ const App = () => {
     for (let i = 0; i < newData.length; i += 1) {
       if (newData[i].id === item.id) {
         newData[i].taskCardId = newTaskCard;
-        const itemToOrder = newData.splice(i, 1);
-        newData.push(itemToOrder[0]);
+        /*         const itemToOrder = newData.splice(i, 1);
+        newData.push(itemToOrder[0]); */
         setData(newData);
         break;
       }
     }
   };
 
+  const moveCardHandler = (dragIndex, hoverIndex) => {
+    const dragItem = data[dragIndex];
+    const coppiedStateArray = [...data];
+    const prevItem = coppiedStateArray.splice(hoverIndex, 1, dragItem);
+    coppiedStateArray.splice(dragIndex, 1, prevItem[0]);
+    setData(coppiedStateArray);
+  };
   return (
-    <AppContext.Provider value={{ setItemInTaskCard }}>
+    <AppContext.Provider value={{ setItemInTaskCard, moveCardHandler }}>
       <AppWrapp>
         <AppPageTitle>Feedback Items</AppPageTitle>
         <AppBoard>

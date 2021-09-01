@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { MdComment } from 'react-icons/md';
-import { useDrag } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import ItemTypes from 'ItemTypes';
+import AppContext from 'AppContext';
 
 const itemLevel = {
   0: {
@@ -73,15 +74,65 @@ const CardItemContent = styled.div`
   line-height: 18px;
 `;
 
-const CardItem = ({ id, level, commentsQty, author, content }) => {
-  const [{ isDragging }, drag] = useDrag({
-    type: ItemTypes.ITEM_CARD,
-    item: { id },
-    collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+const CardItem = ({ id, level, commentsQty, author, content, index }) => {
+  const ref = useRef(null);
+  const { moveCardHandler } = useContext(AppContext);
+
+  // we use a useDrop here because now our CardItem
+  // is a "dropable" zone but only for hover operations
+  // to see if we are moving a card over other and
+  // change the position
+
+  const [, drop] = useDrop({
+    accept: ItemTypes.ITEM_CARD,
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      // Get vertical middle
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      // Time to actually perform the action
+      moveCardHandler(dragIndex, hoverIndex);
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex; //eslint-disable-line
+    },
   });
 
+  const [{ isDragging }, drag] = useDrag({
+    type: ItemTypes.ITEM_CARD,
+    item: { index, id },
+    collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+  });
+  drag(drop(ref));
   return (
-    <CardItemWrapper ref={drag} isDragging={isDragging}>
+    <CardItemWrapper ref={ref} isDragging={isDragging}>
       <CardItemHeader>
         <CardItemComments>
           <MdComment />
